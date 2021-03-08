@@ -105,6 +105,7 @@ public class CarService {
     public Car save(Car car) {
         System.out.println("i m in service");
         if (car.getId() != null) {
+            System.out.println(car.getId());
             return repository.findById(car.getId())
                     .map(carToBeUpdated -> {
                         carToBeUpdated.setDetails(car.getDetails());
@@ -125,11 +126,16 @@ public class CarService {
          * TODO: Find the car by ID from the `repository` if it exists.
          *   If it does not exist, throw a CarNotFoundException
          */
-
+        Optional<Car> optionalCar = repository.findById(id);
+        if (!optionalCar.isPresent()){
+            optionalCar.orElseThrow(CarNotFoundException::new);
+        }
+        Car car = optionalCar.get();
 
         /**
          * TODO: Delete the car from the repository.
          */
+        repository.delete(car);
 
 
     }
